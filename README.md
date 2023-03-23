@@ -6,6 +6,11 @@ get release package from [release page](https://github.com/Luocy7/ha-tplink-came
 or build from source
 
 ```bash
+git clone https://github.com/Luocy7/ha-tplink-camera-control; cd ha-tplink-camera-control
+go build -ldflags="-s -w" -o tpcc main.go && upx -9 tpcc
+```
+
+```bash
 go install github.com/Luocy7/ha-tplink-camera-control 
 ```
 
