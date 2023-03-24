@@ -14,17 +14,20 @@ var (
 type ConfigOptions struct {
 	UserName string `json:"user_name"`
 	PassWord string `json:"pass_word"`
+	Address  string `json:"address"`
+	PubKey   string `json:"pub_key"`
 }
 
-func ReadConfig() (conf *ConfigOptions, err error) {
-	if err = CheckOrCreateConfigFile(); err != nil {
+func ReadConfig() (*ConfigOptions, error) {
+	if err := CheckOrCreateConfigFile(); err != nil {
 		return nil, ErrReadConfigFile
 	}
 	configData, err := os.ReadFile(CONFIGFILE)
+	var cfg ConfigOptions
 	if err == nil {
-		err = toml.Unmarshal(configData, conf)
+		err = toml.Unmarshal(configData, &cfg)
 	}
-	return conf, err
+	return &cfg, err
 }
 
 func WriteConfig(conf *ConfigOptions) error {

@@ -19,10 +19,12 @@ func FileExists(path string) bool {
 func CheckOrCreateConfigFile() error {
 	if _, err := os.Stat(CONFIGDIR); err != nil {
 		var pError *os.PathError
-		if errors.As(err, &pError) {
-			return os.MkdirAll(CONFIGDIR, 0750)
+		if !errors.As(err, &pError) {
+			return err
 		}
-		return err
+		if err = os.MkdirAll(CONFIGDIR, 0750); err != nil {
+			return err
+		}
 	}
 
 	if !FileExists(CONFIGFILE) {
@@ -32,6 +34,5 @@ func CheckOrCreateConfigFile() error {
 		}
 		_ = f.Close()
 	}
-
 	return nil
 }

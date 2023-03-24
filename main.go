@@ -22,5 +22,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	p.WriteHelp(os.Stdout)
+	if len(os.Args) == 1 {
+		p.WriteHelp(os.Stdout)
+		return
+	}
 }
