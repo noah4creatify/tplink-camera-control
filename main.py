@@ -17,7 +17,6 @@ POST /stok=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/ds
 {"method":"get","function":{"name":["module_spec"]}}
 
 # 获取预设位置
-POST /stok=7e82c0908c8b141c8e9bb8353b54e259/ds
 {"method":"get","preset":{"name":["preset"]}}
 
 # 控制云台转到预设位置
