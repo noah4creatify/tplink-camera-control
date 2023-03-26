@@ -29,12 +29,12 @@ func doPostRequest(ctx context.Context, url string, data []byte) ([]byte, error)
 		return nil, err
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	switch resp.StatusCode {
+	case http.StatusUnauthorized:
+		return b, ErrUnAuthorized
+	case http.StatusOK:
+		return b, nil
+	default:
 		return nil, fmt.Errorf("post request failed with code = %d, content = %s", resp.StatusCode, b)
 	}
-	return b, nil
-}
-
-func Post(ctx context.Context, url string, data []byte) ([]byte, error) {
-	return doPostRequest(ctx, url, data)
 }

@@ -1,21 +1,21 @@
 package pkg
 
 import (
-	"errors"
 	"os"
 
 	"github.com/pelletier/go-toml"
-)
-
-var (
-	ErrReadConfigFile = errors.New("read config file error")
 )
 
 type ConfigOptions struct {
 	UserName string `json:"user_name"`
 	PassWord string `json:"pass_word"`
 	Address  string `json:"address"`
-	PubKey   string `json:"pub_key"`
+	Stok     string `json:"stok"`
+}
+
+func (c *ConfigOptions) UpdateSaveStok(stok string) error {
+	c.Stok = stok
+	return WriteConfig(c)
 }
 
 func ReadConfig() (*ConfigOptions, error) {
@@ -28,6 +28,23 @@ func ReadConfig() (*ConfigOptions, error) {
 		err = toml.Unmarshal(configData, &cfg)
 	}
 	return &cfg, err
+}
+
+func GetConfig() (*ConfigOptions, error) {
+	cfg, err := ReadConfig()
+	if err != nil {
+		return nil, err
+	}
+	if cfg.UserName == "" {
+		cfg.UserName = DefaultUserName
+	}
+	if cfg.Address == "" {
+		return nil, ErrAddressNotSet
+	}
+	if cfg.PassWord == "" {
+		return nil, ErrPassWordNotSet
+	}
+	return cfg, nil
 }
 
 func WriteConfig(conf *ConfigOptions) error {

@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"errors"
+	"log"
 	"os"
 )
 
@@ -22,12 +23,14 @@ func CheckOrCreateConfigFile() error {
 		if !errors.As(err, &pError) {
 			return err
 		}
+		log.Println("Config directory not found, creating it.")
 		if err = os.MkdirAll(CONFIGDIR, 0750); err != nil {
 			return err
 		}
 	}
 
 	if !FileExists(CONFIGFILE) {
+		log.Println("Config file not found, creating it.")
 		f, err := os.Create(CONFIGFILE)
 		if err != nil {
 			return err

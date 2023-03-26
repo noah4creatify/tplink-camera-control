@@ -9,7 +9,8 @@ import (
 )
 
 type FlagOptions struct {
-	Set cmd.SetCommand `command:"set" description:"Set the user name and password."`
+	Set  cmd.SetCommand  `command:"set" description:"Set the user name and password."`
+	Turn cmd.TurnCommand `command:"turn" description:"Turn on or off the camera."`
 }
 
 func main() {

@@ -6,41 +6,6 @@ import requests
 import rsa
 from asn1crypto.keys import PublicKeyInfo, RSAPublicKey
 
-# reference https://blog.xiazhiri.com/Mercury-MIPC251C-4-Reverse.html
-"""
-POST /stok=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx/ds
-
-# 获取信息
-{"method":"get","device_info":{"name":["basic_info"]}}
-
-# 获取信息2
-{"method":"get","function":{"name":["module_spec"]}}
-
-# 获取预设位置
-{"method":"get","preset":{"name":["preset"]}}
-
-# 控制云台转到预设位置
-{"method":"do","preset":{"goto_preset":{"id":"1"}}}
-
-# 云台水平/垂直移动
-{"method":"do","motor":{"move":{"x_coord":"10","y_coord":"0"}}}
-
-# 云台步进 direction 0 / 90
-{"method":"do","motor":{"movestep":{"direction":"0"}}}
-
-# 云台停止
-{"method":"do","motor":{"stop":"null"}}
-
-# 增加预置点
-{"method":"do","preset":{"set_preset":{"name":"name","save_ptz":"1"}}}
-
-# 获取镜头遮蔽信息
-{"method":"get","lens_mask":{"name":["lens_mask_info"]}}
-
-# 镜头遮蔽
-{"method":"set","lens_mask":{"lens_mask_info":{"enabled":"on"}}}
-"""
-
 
 def tp_encrypt(pwd: str) -> str:
     base = "RDpbLfCPsJZ7fiv"
@@ -72,13 +37,13 @@ def tp_encrypt(pwd: str) -> str:
 
 
 def convert_rsa_key(key: str) -> rsa.PublicKey:
-    pub_keyinfo: RSAPublicKey = PublicKeyInfo.load(base64.b64decode(key))[
-        "public_key"
-    ].parsed
-    return rsa.PublicKey(
-        int.from_bytes(pub_keyinfo["modulus"].contents, "big"),
-        int.from_bytes(pub_keyinfo["public_exponent"].contents, "big"),
-    )
+    pub_keyinfo: RSAPublicKey = PublicKeyInfo.load(base64.b64decode(key))
+
+    pk = pub_keyinfo["public_key"].parsed
+
+    n = int.from_bytes(pk["modulus"].contents, "big")
+    e = int.from_bytes(pk["public_exponent"].contents, "big")
+    return rsa.PublicKey(n, e)
 
 
 def rsa_encrypt(message: str, key: str) -> str:

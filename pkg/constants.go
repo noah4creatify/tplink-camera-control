@@ -9,8 +9,13 @@ import (
 const (
 	AppName = "tpcc"
 
+	DefaultUserName   = "admin"
 	EncryptShortToken = "RDpbLfCPsJZ7fiv"
 	EncryptLongToken  = "yLwVl0zKqws7LgKPRQ84Mdt708T1qQ3Ha7xv3H7NyU84p21BriUWBU43odz3iP4rBL3cD02KZciXTysVXiV8ngg6vL48rPJyAUw0HurW20xqxv9aYb4M9wK1Ae0wlro510qXeU07kV57fQMc8L6aLgMLwygtc0F10a0Dg70TOoouyFhdysuRMO51yY5ZlOZZLEal1h0t9YQW0Ko7oBwmCAHoic4HYbUyVeU3sfQ1xtXcPcf1aT303wAQhv66qzW"
+
+	ipc44awN            = "C861E9DE714597CC9F62DC68E0722306BE9CD45DA9AE1C6B9E2C83B918466D380904A0108B2830B834DD9A63A6BE4F2D6F40FBC93F5AF583D7E37346CA9EEF8D"
+	ipc44awE            = "10001"
+	ErrUnAuthorizedCode = -40401
 )
 
 var (
@@ -19,8 +24,10 @@ var (
 )
 
 const (
+	PostDsUrl = "http://%s/stok=%s/ds"
+
 	PayloadGetKey = `{"method": "do", "login": {}}`
-	PayloadLogin  = `{"method":"do","login":{"username":"admin","encrypt_type":"2","password":"%s"}}`
+	PayloadLogin  = `{"method":"do","login":{"username":"%s","encrypt_type":"2","password":"%s"}}`
 
 	PayloadGetBasicInfo    = `{"method":"get","device_info":{"name":["basic_info"]}}`
 	PayloadGetModuleSpec   = `{"method":"get","function":{"name":["module_spec"]}}`
@@ -83,7 +90,7 @@ const (
 
 	PayloadGetPreset    = `{"method":"get","preset":{"name":["preset"]}}`
 	PayloadSetPreset    = `{"method":"do","preset":{"set_preset":{"name":"%s","save_ptz":"1"}}}`
-	PayloadGotoPreset   = `{"method":"do","preset":{"goto_preset": {"id": "1"}}}`
+	PayloadGotoPreset   = `{"method":"do","preset":{"goto_preset": {"id": "%s"}}}`
 	PayloadDeletePreset = `{"method":"do","preset":{"remove_preset":{"id":["%s"]}}}`
 
 	PayloadDoMotorStop      = `{"method":"do","motor":{"stop":"null"}}`
