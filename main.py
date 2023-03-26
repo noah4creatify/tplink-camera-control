@@ -6,6 +6,14 @@ import requests
 import rsa
 from asn1crypto.keys import PublicKeyInfo, RSAPublicKey
 
+"""
+requirements.txt
+
+asn1crypto==1.5.1
+requests==2.28.2
+rsa==4.9
+"""
+
 
 def tp_encrypt(pwd: str) -> str:
     base = "RDpbLfCPsJZ7fiv"
