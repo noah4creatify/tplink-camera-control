@@ -2,16 +2,12 @@
 
 ## Installation
 
-get release package from [release page](https://github.com/Luocy7/ha-tplink-camera-control/release)
+get release package from [release page](https://github.com/Luocy7/tplink-camera-control/releases)
 or build from source
 
 ```bash
-git clone https://github.com/Luocy7/ha-tplink-camera-control; cd ha-tplink-camera-control
-go build -ldflags="-s -w" -o tpcc main.go && upx -9 tpcc
-```
-
-```bash
-go install github.com/Luocy7/ha-tplink-camera-control 
+git clone https://github.com/Luocy7/tplink-camera-control; cd tplink-camera-control
+go build -o tpcc
 ```
 
 ## Usage
@@ -30,9 +26,8 @@ Available commands:
   turn  Turn on or off the camera.
 ```
 
-Note that tpcc will create config file `tpcc.toml` in your User Directory with `XDG_CONFIG_HOME` or `HOME` environment
-variable.
-detail see [go xdg](https://github.com/adrg/xdg#xdg-base-directory)
+Note that tpcc will create config file `tpcc.toml` in your User Config Directory with `XDG_CONFIG_HOME` or `HOME`
+environment variable. detail see [go xdg](https://github.com/adrg/xdg#xdg-base-directory)
 
 ## Example
 
