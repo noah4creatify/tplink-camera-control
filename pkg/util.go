@@ -1,6 +1,8 @@
 package pkg
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"log"
 	"os"
@@ -38,4 +40,9 @@ func CheckOrCreateConfigFile() error {
 		_ = f.Close()
 	}
 	return nil
+}
+
+func GetMD5Hash(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
 }

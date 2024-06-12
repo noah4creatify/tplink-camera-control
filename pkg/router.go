@@ -25,7 +25,19 @@ type Router struct {
 	pubKey *rsa.PublicKey
 }
 
-func (r *Router) PostData(data []byte) ([]byte, error) {
+func (r *Router) PostData(url string, data []byte) ([]byte, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return doPostRequest(ctx, url, data)
+}
+
+func (r *Router) PostLoginData(data []byte) ([]byte, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	return doPostRequest(ctx, fmt.Sprintf(PostLoginUrl, r.config.Address), data)
+}
+
+func (r *Router) PostDsData(data []byte) ([]byte, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	return doPostRequest(ctx, fmt.Sprintf(PostDsUrl, r.config.Address, r.config.Stok), data)
@@ -35,14 +47,13 @@ func (r *Router) RenewPostData(resData, data []byte) ([]byte, error) {
 	if err := r.RenewStok(resData); err != nil {
 		return nil, err
 	}
-	return r.PostData(data)
+	return r.PostDsData(data)
 }
 
 func (r *Router) RetryPostDataWhenNotAuth(data []byte) ([]byte, error) {
-	resData, err := r.PostData(data)
+	resData, err := r.PostDsData(data)
 	if err != nil {
-		switch err {
-		case ErrUnAuthorized:
+		if errors.Is(err, ErrUnAuthorized) { // Unauthorized, renew stok and retry
 			return r.RenewPostData(resData, data)
 		}
 		return nil, err
@@ -63,17 +74,12 @@ func (r *Router) RenewStok(data []byte) (err error) {
 	if err = json.Unmarshal(data, &unAuthRes); err != nil {
 		return
 	}
-	if unAuthRes.ErrorCode != ErrUnAuthorizedCode {
+	if unAuthRes.ErrorCode != EUNAUTH {
 		return fmt.Errorf("unexpected error code: %d", unAuthRes.ErrorCode)
 	}
-	tpEncryptPasswd := securityEncode(r.config.PassWord)
-	postPasswd, err := encrypt(r.pubKey, tpEncryptPasswd+":"+unAuthRes.Data.Nonce)
-	if err != nil {
-		return err
-	}
 
-	payload := fmt.Sprintf(PayloadLogin, r.config.UserName, postPasswd)
-	resData, err := r.PostData([]byte(payload))
+	payload := fmt.Sprintf(PayloadLogin, r.config.UserName, GetMD5Hash(r.config.PassWord+":"+unAuthRes.Data.Nonce))
+	resData, err := r.PostLoginData([]byte(payload))
 	if err != nil {
 		return err
 	}
@@ -135,19 +141,21 @@ func (r *Router) IsLenMaskOn() bool {
 	return res.LensMask.LensMaskInfo.Enabled == "on"
 }
 
-func (r *Router) SetLenMaskOff() error {
-	_, err := r.RetryPostDataWhenNotAuth([]byte(PayloadSetLensmaskOff))
+func (r *Router) Do(payload string) error {
+	_, err := r.RetryPostDataWhenNotAuth([]byte(payload))
 	return err
+}
+
+func (r *Router) SetLenMaskOff() error {
+	return r.Do(PayloadSetLensmaskOff)
 }
 
 func (r *Router) SetLenMaskOn() error {
-	_, err := r.RetryPostDataWhenNotAuth([]byte(PayloadSetLensmaskOn))
-	return err
+	return r.Do(PayloadSetLensmaskOn)
 }
 
 func (r *Router) GotoPreset(id string) error {
-	_, err := r.RetryPostDataWhenNotAuth([]byte(fmt.Sprintf(PayloadGotoPreset, id)))
-	return err
+	return r.Do(fmt.Sprintf(PayloadGotoPreset, id))
 }
 
 func (r *Router) TurnOnCamera() error {

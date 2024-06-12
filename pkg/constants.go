@@ -7,15 +7,12 @@ import (
 )
 
 const (
-	AppName = "tpcc"
-
+	AppName           = "tpcc"
 	DefaultUserName   = "admin"
 	EncryptShortToken = "RDpbLfCPsJZ7fiv"
 	EncryptLongToken  = "yLwVl0zKqws7LgKPRQ84Mdt708T1qQ3Ha7xv3H7NyU84p21BriUWBU43odz3iP4rBL3cD02KZciXTysVXiV8ngg6vL48rPJyAUw0HurW20xqxv9aYb4M9wK1Ae0wlro510qXeU07kV57fQMc8L6aLgMLwygtc0F10a0Dg70TOoouyFhdysuRMO51yY5ZlOZZLEal1h0t9YQW0Ko7oBwmCAHoic4HYbUyVeU3sfQ1xtXcPcf1aT303wAQhv66qzW"
-
-	ipc44awN            = "C861E9DE714597CC9F62DC68E0722306BE9CD45DA9AE1C6B9E2C83B918466D380904A0108B2830B834DD9A63A6BE4F2D6F40FBC93F5AF583D7E37346CA9EEF8D"
-	ipc44awE            = "10001"
-	ErrUnAuthorizedCode = -40401
+	ipc44awN          = "C861E9DE714597CC9F62DC68E0722306BE9CD45DA9AE1C6B9E2C83B918466D380904A0108B2830B834DD9A63A6BE4F2D6F40FBC93F5AF583D7E37346CA9EEF8D"
+	ipc44awE          = "10001"
 )
 
 var (
@@ -24,19 +21,16 @@ var (
 )
 
 const (
-	PostDsUrl = "http://%s/stok=%s/ds"
-
-	PayloadGetKey = `{"method": "do", "login": {}}`
-	PayloadLogin  = `{"method":"do","login":{"username":"%s","encrypt_type":"2","password":"%s"}}`
-
-	PayloadGetBasicInfo    = `{"method":"get","device_info":{"name":["basic_info"]}}`
-	PayloadGetModuleSpec   = `{"method":"get","function":{"name":["module_spec"]}}`
-	PayloadGetCapabilities = `{"method":"get","audio_capability":{"name":["device_speaker","device_microphone"]},"motor":{"name":["capability"]},"playback":{"table":["scale_capability"]},"cet":{"name":["media_encrypt"]}}`
-	PayloadGetHarddisk     = `{"method":"get","harddisk_manage":{"table":["hd_info"],"name":["harddisk"]}}`
-	PayloadGetNetworkType  = `{"method":"do","network":{"get_connection_type":"null"}}`
-	PayloadGetClockStatus  = `{"method":"get","system":{"name":["clock_status"]}}`
-	PayloadGetMediaEncrypt = `{"method":"get","cet":{"name":["media_encrypt"]}}`
-	PayloadGetVhttpd       = `{"method":"get","cet":{"name":["vhttpd"]}}`
+	PostLoginUrl           = "http://%s/"
+	PostDsUrl              = "http://%s/stok=%s/ds"
+	PayloadLogin           = `{"method":"do","login":{"username":"%s","encrypt_type":"2","password":"%s","md5_encrypt_type": "1"}}`
+	PayloadGetBasicInfo    = `{"method":"get","device_info":{"name":["basic_info"]}}`                       // ok
+	PayloadGetModuleSpec   = `{"method":"get","function":{"name":["module_spec"]}}`                         // ok
+	PayloadGetHarddisk     = `{"method":"get","harddisk_manage":{"table":["hd_info"],"name":["harddisk"]}}` // ok
+	PayloadGetNetworkType  = `{"method":"do","network":{"get_connection_type":"null"}}`                     // ok
+	PayloadGetClockStatus  = `{"method":"get","system":{"name":["clock_status"]}}`                          // ok
+	PayloadGetMediaEncrypt = `{"method":"get","cet":{"name":["media_encrypt"]}}`                            // ok
+	PayloadGetVhttpd       = `{"method":"get","cet":{"name":["vhttpd"]}}`                                   // ok
 	PayloadGetAll          = `{
 		"method":"get",
 		"harddisk_manage":{"table":["hd_info"],"name":["harddisk"]},
@@ -61,18 +55,18 @@ const (
 		"target_track":{"name":["target_track_info"]},
 		"lens_mask":{"name":["lens_mask_info"]},
 		"preset":{"name":["preset"]},
-		"msg_alarm":{"name":["chn1_msg_alarm_info"]},
+		"msg_alarm":{"name":["chn1_msg_alarm_info"]}
 	}`
 
-	PayloadCheckUpgrade = `{"method":"do","cloud_config":{"check_fw_version":"null"}}`
+	PayloadCheckUpgrade = `{"method":"do","cloud_config":{"check_fw_version":"null"}}` // ok
 
-	PayloadGetLed    = `{"method":"get","led":{"name":["config"]}}`
-	PayloadSetLedOn  = `{"method":"set","led":{"config":{"enabled":"on"}}}`
-	PayloadSetLedOff = `{"method":"set","led":{"config":{"enabled":"off"}}}`
+	PayloadGetLed    = `{"method":"get","led":{"name":["config"]}}`          // ok
+	PayloadSetLedOn  = `{"method":"set","led":{"config":{"enabled":"on"}}}`  // ok
+	PayloadSetLedOff = `{"method":"set","led":{"config":{"enabled":"off"}}}` // ok
 
-	PayloadGetTrack    = `{"method":"get","target_track":{"name":["target_track_info"]}}`
-	PayloadSetTrackOn  = `{"method":"set","target_track":{"target_track_info":{"enabled":"on"}}}`
-	PayloadSetTrackOff = `{"method":"set","target_track":{"target_track_info":{"enabled":"off"}}}`
+	PayloadGetTrack    = `{"method":"get","target_track":{"name":["target_track_info"]}}`          // ok
+	PayloadSetTrackOn  = `{"method":"set","target_track":{"target_track_info":{"enabled":"on"}}}`  // ok
+	PayloadSetTrackOff = `{"method":"set","target_track":{"target_track_info":{"enabled":"off"}}}` // ok
 
 	PayloadGetVideoFlip    = `{"method":"get","image":{"name":["switch"]}}`
 	PayloadSetVideoFlipOn  = `{"method":"set","image":{"switch":{"flip_type":"center"}}}`
